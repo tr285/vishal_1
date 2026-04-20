@@ -1,38 +1,36 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="d-flex align-items-center justify-content-center" style="min-height: 80vh;" id="success-anim">
-    <div class="glass-card p-5 text-center" style="width: 100%; max-width: 500px;">
+<div style="display: flex; align-items: center; justify-content: center; min-height: calc(100vh - 150px);" id="success-anim">
+    <div class="glass-card" style="width: 100%; max-width: 500px; text-align: center;">
         
-        <div class="bg-success text-white rounded-circle d-inline-flex justify-content-center align-items-center mb-4" style="width: 80px; height: 80px; font-size: 2.5rem;">
+        <div style="width: 80px; height: 80px; background: linear-gradient(135deg, var(--success-color) 0%, #00a67a 100%); border-radius: 50%; display: flex; justify-content: center; align-items: center; margin: 0 auto 24px; font-size: 40px; color: white;">
             <i class="fa-solid fa-check"></i>
         </div>
 
-        <h3 class="fw-bold text-success mb-2">Deposit Successful</h3>
-        <p class="text-muted small mb-4">Your wallet has been credited.</p>
+        <h2 style="font-weight: 700; color: var(--success-color); margin: 0 0 8px 0;">Deposit Successful</h2>
+        <p style="color: var(--text-tertiary); margin: 0 0 24px 0; font-size: 14px;">Your wallet has been credited with funds</p>
 
-        <div class="bg-light bg-opacity-50 p-4 rounded text-start mb-4 border border-secondary border-opacity-25">
-            <div class="d-flex justify-content-between border-bottom pb-2 mb-2">
-                <span class="text-muted">Transaction ID:</span>
-                <span class="fw-bold font-monospace">{{ transaction_id }}</span>
+        <div style="background: var(--card-bg-light); padding: 20px; border-radius: 12px; text-align: left; margin-bottom: 24px; border: 1px solid var(--glass-border);">
+            <div style="display: flex; justify-content: space-between; padding-bottom: 12px; margin-bottom: 12px; border-bottom: 1px solid var(--glass-border);">
+                <span style="color: var(--text-tertiary);">Transaction ID:</span>
+                <span style="font-weight: 700; font-family: monospace; color: var(--text-main);">{{ transaction_id }}</span>
             </div>
-            <div class="d-flex justify-content-between border-bottom pb-2 mb-2">
-                <span class="text-muted">Date & Time:</span>
-                <span class="fw-bold small">{{ payment_time }}</span>
+            <div style="display: flex; justify-content: space-between; padding-bottom: 12px; margin-bottom: 12px; border-bottom: 1px solid var(--glass-border);">
+                <span style="color: var(--text-tertiary);">Date & Time:</span>
+                <span style="font-weight: 600; font-size: 13px; color: var(--text-main);">{{ payment_time }}</span>
             </div>
-            <div class="d-flex justify-content-between border-bottom pb-2 mb-2">
-                <span class="text-muted">Paid to UI:</span>
-                <span class="fw-bold">{{ upi_id }}</span>
+            <div style="display: flex; justify-content: space-between; padding-bottom: 12px; margin-bottom: 12px; border-bottom: 1px solid var(--glass-border);">
+                <span style="color: var(--text-tertiary);">Paid via:</span>
+                <span style="font-weight: 600; color: var(--text-main);">{{ upi_id }}</span>
             </div>
-            <div class="d-flex justify-content-between mt-3 pt-2">
-                <span class="text-muted fw-bold">Amount Paid:</span>
-                <span class="fw-bold text-danger fs-5">₹{{ "%.2f"|format(amount) }}</span>
+            <div style="display: flex; justify-content: space-between; padding-top: 12px;">
+                <span style="color: var(--text-tertiary); font-weight: 600;">Amount Credited:</span>
+                <span style="font-weight: 700; font-size: 18px; color: var(--success-color);">₹{{ "%.2f"|format(amount) }}</span>
             </div>
         </div>
 
-        <div class="d-flex gap-3 justify-content-center">
-            <a href="/dashboard" class="btn btn-fintech px-4 py-2 rounded-pill w-100">Return to Dashboard</a>
-        </div>
+        <a href="/dashboard" class="btn btn-primary btn-lg">Return to Dashboard</a>
     </div>
 </div>
 {% endblock %}

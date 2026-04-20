@@ -1,63 +1,71 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="row mt-4 g-4">
-    <div class="col-md-6 col-lg-5">
-        <h4 class="fw-bold mb-4"><i class="fa-solid fa-hand-holding-dollar text-warning me-2"></i> Instant Loan</h4>
+<div style="display: grid; grid-template-columns: 1fr 1.4fr; gap: 24px; margin-bottom: 40px;">
+    <!-- Loan Application Card -->
+    <div>
+        <div class="page-header" style="margin-bottom: 20px;">
+            <h2 style="font-size: 24px;"><i class="fa-solid fa-hand-holding-dollar" style="color: var(--warning-color); margin-right: 8px;"></i>Instant Loan</h2>
+        </div>
 
-        <div class="glass-card p-4 h-100">
-            <h5 class="fw-bold mb-3">Apply for a Loan</h5>
-            <p class="text-muted small">Max eligibility: <strong>₹50,000</strong>. Flat interest rate of <strong>5%</strong> applies upon request. Instantly credited to your balance.</p>
+        <div class="glass-card">
+            <h4 style="font-weight: 700; margin-bottom: 12px; color: var(--text-main);">Apply for a Loan</h4>
+            <p style="color: var(--text-tertiary); margin-bottom: 20px; font-size: 13px;">
+                <strong>Maximum eligibility:</strong> ₹50,000<br>
+                <strong>Interest rate:</strong> Flat 5%<br>
+                <strong>Processing:</strong> Instantly credited
+            </p>
             
-            <form action="/loan" method="POST" class="mt-4">
+            <form action="/loan" method="POST" onsubmit="if(!confirm('You are applying for a ₹[amount] loan with a 5% flat fee. Continue?')) return false; showLoader();">
                 <input type="hidden" name="action" value="apply">
-                <div class="mb-4">
-                    <label class="form-label text-muted small fw-bold">Loan Amount Requested (₹)</label>
-                    <div class="input-group">
-                        <span class="input-group-text bg-dark border-secondary text-secondary">₹</span>
-                        <input type="number" name="amount" class="form-control bg-dark border-secondary text-white" min="1000" max="50000" step="100" required placeholder="0.00">
-                    </div>
+                <div class="form-group">
+                    <label for="amount">Loan Amount (₹)</label>
+                    <input type="number" class="form-control" id="amount" name="amount" placeholder="e.g., 10000" min="1000" max="50000" step="100" required>
+                    <small>₹1,000 - ₹50,000</small>
                 </div>
-                <button type="submit" class="btn btn-warning w-100 py-2 rounded-pill fw-bold text-dark" onclick="return confirm('You are applying for a loan with a 5% flat fee. Do you wish to continue?')">
-                    Get Instant Loan
+                <button type="submit" class="btn btn-warning" style="width: 100%; background: linear-gradient(135deg, #ffb800 0%, #ff9500 100%); color: #0a0e27; font-weight: 700;">
+                    <i class="fa-solid fa-check-circle"></i> Get Instant Loan
                 </button>
             </form>
         </div>
     </div>
     
-    <div class="col-md-6 col-lg-7">
-        <h4 class="fw-bold mb-4"><i class="fa-solid fa-receipt text-success me-2"></i> Active Liabilities</h4>
+    <!-- Active Loans Card -->
+    <div>
+        <div class="page-header" style="margin-bottom: 20px;">
+            <h2 style="font-size: 24px;"><i class="fa-solid fa-receipt" style="color: var(--success-color); margin-right: 8px;"></i>Active Liabilities</h2>
+        </div>
         
-        <div class="glass-card p-4 h-100">
+        <div class="glass-card">
             {% if loans %}
-            <div class="table-responsive">
-                <table class="table table-hover table-borderless align-middle">
-                    <thead class="text-muted small border-bottom border-secondary border-opacity-25">
+            <div style="overflow-x: auto;">
+                <table style="width: 100%;">
+                    <thead>
                         <tr>
                             <th>Loan Ref</th>
                             <th>Amount Borrowed</th>
-                            <th>Amount Due (Incl. Interest)</th>
-                            <th class="text-end">Action</th>
+                            <th>Amount Due</th>
+                            <th style="text-align: right;">Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         {% for l in loans %}
                         <tr>
-                            <td class="text-secondary small font-monospace">LN-{{ l.id }}</td>
-                            <td class="text-muted">₹{{ "%.2f"|format(l.amount_granted) }}</td>
-                            <td class="fw-bold {% if l.status == 'active' %}text-danger{% else %}text-success{% endif %}">
+                            <td style="font-family: monospace; color: var(--text-tertiary); font-size: 12px;">LN-{{ l.id }}</td>
+                            <td style="color: var(--text-main); font-weight: 600;">₹{{ "%.2f"|format(l.amount_granted) }}</td>
+                            <td style="font-weight: 700; {% if l.status == 'active' %}color: var(--danger-color){% else %}color: var(--success-color){% endif %};">
                                 ₹{{ "%.2f"|format(l.amount_due) }}
-                                {% if l.status == 'repaid' %}<br><span class="badge bg-success bg-opacity-25 text-success">REPAID</span>{% endif %}
+                                {% if l.status == 'repaid' %}<div style="font-size: 11px; margin-top: 4px; background: rgba(0, 217, 163, 0.15); color: var(--success-color); padding: 2px 6px; border-radius: 4px; font-weight: 700; display: inline-block;">REPAID</div>{% endif %}
                             </td>
-                            <td class="text-end">
+                            <td style="text-align: right;">
                                 {% if l.status == 'active' %}
-                                <form action="/loan" method="POST" class="d-inline">
+                                <form action="/loan" method="POST" style="display: inline;">
                                     <input type="hidden" name="action" value="repay">
                                     <input type="hidden" name="loan_id" value="{{ l.id }}">
-                                    <button type="submit" class="btn btn-sm btn-outline-success rounded-pill px-3" onclick="return confirm('Repay ₹{{ "%.2f"|format(l.amount_due) }} from your current balance?');">Repay</button>
+                                    <button type="submit" class="btn btn-accent btn-sm" onclick="return confirm('Repay ₹{{ "%.2f"|format(l.amount_due) }} from your balance?');">Repay</button>
                                 </form>
                                 {% else %}
-                                -
+                                <span style="color: var(--text-tertiary);">-</span>
                                 {% endif %}
                             </td>
                         </tr>
@@ -66,12 +74,21 @@
                 </table>
             </div>
             {% else %}
-            <div class="text-center py-5 text-muted">
-                <i class="fa-solid fa-shield-halved fa-2x mb-3 opacity-50"></i>
-                <p>You have no active loans. Fantastic financial health!</p>
+            <div style="text-align: center; padding: 40px 20px; color: var(--text-tertiary);">
+                <i class="fa-solid fa-shield-halved" style="font-size: 40px; opacity: 0.4; display: block; margin-bottom: 12px;"></i>
+                <p style="margin: 0;">You have no active loans. Fantastic financial health!</p>
             </div>
             {% endif %}
         </div>
     </div>
 </div>
+
+<style>
+    @media (max-width: 1024px) {
+        div {
+            display: grid !important;
+            grid-template-columns: 1fr !important;
+        }
+    }
+</style>
 {% endblock %}
