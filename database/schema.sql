@@ -1,0 +1,21 @@
+-- CREATE TABLE IF NOT EXISTS users (
+--     id INT AUTO_INCREMENT PRIMARY KEY,
+--     full_name VARCHAR(100) NOT NULL,
+--     mobile VARCHAR(15) NOT NULL UNIQUE,
+--     password VARCHAR(255) NOT NULL,
+--     balance DECIMAL(15, 2) DEFAULT 0.00,
+--     role VARCHAR(10) DEFAULT 'user'
+-- );
+
+-- CREATE TABLE IF NOT EXISTS transactions (
+--     id INT AUTO_INCREMENT PRIMARY KEY,
+--     sender_id INT NOT NULL,
+--     receiver_id INT NOT NULL,
+--     amount DECIMAL(15, 2) NOT NULL,
+--     timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+--     FOREIGN KEY (sender_id) REFERENCES users(id) ON DELETE CASCADE,
+--     FOREIGN KEY (receiver_id) REFERENCES users(id) ON DELETE CASCADE
+-- );
+
+-- -- Note: The PostgreSQL fallback schema is handled natively in models/database.py during initialization 
+-- -- if Supabase is being used, because PostgreSQL uses SERIAL instead of AUTO_INCREMENT.

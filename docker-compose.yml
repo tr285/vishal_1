@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    ports:
+      - "5000:5000"
+    environment:
+      - FLASK_ENV=production
+      - SECRET_KEY=supersecretkey_fintech_prod
+      - MYSQL_HOST=db
+      - MYSQL_USER=airtel_user
+      - MYSQL_PASSWORD=airtel_pass
+      - MYSQL_DATABASE=airtel_payment_bank
+      - MYSQL_PORT=3306
+      # Optionally add SUPABASE_DB_URL here to override .env
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - fintech_network
+
+  db:
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: airtel_payment_bank
+      MYSQL_USER: airtel_user
+      MYSQL_PASSWORD: airtel_pass
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - fintech_network
+
+volumes:
+  db_data:
+
+networks:
+  fintech_network:
+    driver: bridge
