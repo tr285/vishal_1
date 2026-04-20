@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div style="max-width: 500px; margin: 0 auto;">
+    <div class="page-header">
+        <h1>Withdraw Money</h1>
+        <p>Transfer funds from your account to your bank</p>
+    </div>
+    
+    <div class="glass-card" style="margin-bottom: 20px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+            <span style="color: var(--text-tertiary); font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Available Balance</span>
+            <span style="font-weight: 700; font-size: 18px; color: var(--primary-color);">₹{{ "%.2f"|format(balance) }}</span>
+        </div>
+
+        <form action="/withdraw" method="POST" onsubmit="showLoader();">
+            <div class="form-group">
+                <label for="amount">Withdrawal Amount (₹)</label>
+                <input type="number" class="form-control" id="amount" name="amount" placeholder="0.00" min="100" max="{{ balance }}" step="0.01" required>
+                <small>Minimum ₹100, maximum ₹{{ "%.2f"|format(balance) }}</small>
+            </div>
+            
+            <div class="form-group">
+                <label for="bank_account">Bank Account</label>
+                <select class="form-control" id="bank_account" name="bank_account" required>
+                    <option value="">Select your bank account</option>
+                    <option value="primary">Primary Account (****1234)</option>
+                </select>
+                <small>Select the account where funds will be transferred</small>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-lg">
+                <i class="fa-solid fa-arrow-down"></i> Withdraw Funds
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}
