@@ -1,4 +1,13 @@
 {
+  "name": "airteal-payment-bank",
+  "version": "1.0.0",
+  "description": "Modern fintech payment bank application with glassmorphism UI",
+  "main": "app.py",
+  "scripts": {
+    "dev": "python app.py",
+    "start": "python app.py",
+    "build": "echo 'No build step required for Flask'"
+  },
   "dependencies": {
     "@supabase/ssr": "^0.10.2",
     "@supabase/supabase-js": "^2.103.3",
