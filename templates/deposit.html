@@ -1,35 +1,42 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="d-flex align-items-center justify-content-center" style="min-height: 80vh;">
-    <div class="glass-card p-4 text-center shadow-lg" style="width: 100%; max-width: 450px; border-radius: 20px;">
-        <h3 class="fw-bold text-primary mb-3"><i class="fa-solid fa-qrcode"></i> Add Money via UPI</h3>
-        <p class="text-muted small mb-4">Scan this QR code with any UPI app (GPay, PhonePe, Paytm) to deposit funds directly to your Airteal Bank Account.</p>
+<div style="max-width: 500px; margin: 0 auto; display: flex; align-items: center; justify-content: center; min-height: calc(100vh - 150px);">
+    <div class="glass-card" style="text-align: center; width: 100%;">
+        <h2 style="font-weight: 700; margin-bottom: 8px; color: var(--text-main);">
+            <i class="fa-solid fa-qrcode" style="color: var(--primary-color); margin-right: 8px;"></i>Add Money
+        </h2>
+        <p style="color: var(--text-tertiary); margin-bottom: 24px;">Scan QR code with any UPI app to deposit funds</p>
         
-        <!-- Dynamic QR Code pointing to standard UPI intent -->
-        <div class="bg-white p-3 rounded d-inline-block shadow-sm mb-4">
-            <img src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=upi://pay?pa=visha2okicici&pn=Vishal+jagtap" 
+        <!-- UPI QR Code -->
+        <div style="background: white; padding: 20px; border-radius: 12px; display: inline-block; margin-bottom: 24px;">
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=upi://pay?pa=airteal@bank&pn=AirtealBank" 
                  alt="UPI QR Code" 
-                 class="img-fluid rounded" 
-                 style="width: 250px; height: 250px;">
+                 style="width: 250px; height: 250px; border-radius: 10px;">
         </div>
 
-        <p class="fw-bold mb-3 d-flex align-items-center justify-content-center gap-2"><i class="fa-solid fa-wallet text-success fa-lg"></i> Vishal Jagtap <br> <span class="badge bg-light text-dark fw-normal font-monospace">vishalj2@okicici</span></p>
+        <div style="background: rgba(0, 102, 255, 0.1); padding: 16px; border-radius: 12px; margin-bottom: 24px; border: 1px solid rgba(0, 102, 255, 0.2);">
+            <p style="color: var(--text-main); font-weight: 600; margin: 0 0 4px 0;">
+                <i class="fa-solid fa-wallet" style="color: var(--success-color); margin-right: 8px;"></i>Airteal Payment Bank
+            </p>
+            <p style="color: var(--text-tertiary); margin: 0; font-family: monospace; font-size: 13px;">airteal@bank</p>
+        </div>
 
-        <form action="/deposit" method="POST" class="needs-validation text-start mt-4" novalidate onsubmit="document.getElementById('addMoneyBtn').disabled = true;">
-            <div class="form-floating mb-3">
-                <input type="number" class="form-control bg-transparent fw-bold" id="amount" name="amount" placeholder="Amount (₹)" min="1" required style="font-size: 1.2rem;">
+        <form action="/deposit" method="POST" onsubmit="showLoader();">
+            <div class="form-group" style="text-align: left;">
                 <label for="amount">Deposit Amount (₹)</label>
+                <input type="number" class="form-control" id="amount" name="amount" placeholder="Enter amount" min="1" step="0.01" required>
+                <small>Minimum ₹1, maximum ₹1,00,000</small>
             </div>
             
-            <div class="form-floating mb-4">
-                <input type="text" class="form-control bg-transparent" id="utr" name="utr" placeholder="12-digit UTR No." minlength="12" maxlength="12" pattern="\d{12}" required>
-                <label for="utr">12-Digit UTR Number</label>
-                <div class="invalid-feedback text-white">Please provide a valid 12-digit UTR from your UPI app.</div>
+            <div class="form-group" style="text-align: left;">
+                <label for="utr">UTR / Transaction ID</label>
+                <input type="text" class="form-control" id="utr" name="utr" placeholder="12-digit UTR from UPI app" minlength="12" maxlength="12" pattern="[0-9]{12}" required>
+                <small>12-digit unique transaction reference from your UPI app</small>
             </div>
 
-            <button type="submit" id="addMoneyBtn" class="btn btn-fintech w-100 py-3 rounded-pill fw-bold d-flex align-items-center justify-content-center gap-2" style="font-size: 1.1rem;">
-                Confirm Deposit <i class="fa-solid fa-circle-check"></i>
+            <button type="submit" class="btn btn-primary btn-lg">
+                <i class="fa-solid fa-check-circle"></i> Confirm Deposit
             </button>
         </form>
     </div>

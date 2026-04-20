@@ -1,33 +1,39 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="d-flex align-items-center justify-content-center" style="min-height: 80vh;">
-    <div class="glass-card p-5" style="width: 100%; max-width: 450px;">
-        <div class="text-center mb-4">
-            <h3 class="fw-bold text-primary">Open an Account</h3>
-            <p class="text-muted small">Join Airteal paymen seconds</p>
+<div style="display: flex; align-items: center; justify-content: center; min-height: calc(100vh - 100px);">
+    <div class="glass-card" style="width: 100%; max-width: 450px;">
+        <div style="text-align: center; margin-bottom: 32px;">
+            <img src="{{ url_for('static', filename='images/airteal-logo.jpg') }}" alt="Airteal" style="height: 48px; margin-bottom: 12px; border-radius: 10px;">
+            <h2 style="font-weight: 700; color: var(--text-main); margin: 0 0 8px 0;">Open an Account</h2>
+            <p style="color: var(--text-tertiary); margin: 0;">Join thousands of users managing money with Airteal</p>
         </div>
 
-        <form action="/register" method="POST" class="needs-validation" novalidate>
-            <div class="form-floating mb-3">
-                <input type="text" class="form-control bg-transparent" id="full_name" name="full_name" placeholder="Full Name" required>
+        <form action="/register" method="POST" onsubmit="showLoader()">
+            <div class="form-group">
                 <label for="full_name">Full Name</label>
+                <input type="text" class="form-control" id="full_name" name="full_name" placeholder="John Doe" required>
+                <small>Your legal name as it appears on your ID</small>
             </div>
 
-            <div class="form-floating mb-3">
-                <input type="tel" class="form-control bg-transparent" id="mobile" name="mobile" placeholder="Mobile Number" pattern="[0-9]{10}" title="Must be 10 digits" required>
-                <label for="mobile">10-Digit Mobile Number</label>
+            <div class="form-group">
+                <label for="mobile">Mobile Number</label>
+                <input type="tel" class="form-control" id="mobile" name="mobile" placeholder="9876543210" pattern="[0-9]{10}" title="Must be 10 digits" required>
+                <small>10-digit mobile number for verification</small>
             </div>
             
-            <div class="form-floating mb-4">
-                <input type="password" class="form-control bg-transparent" id="password" name="password" placeholder="Secure Password" required minlength="6">
-                <label for="password">Secure Password</label>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" class="form-control" id="password" name="password" placeholder="Create a strong password" required minlength="6">
+                <small>Minimum 6 characters recommended</small>
             </div>
 
-            <button type="submit" class="btn btn-fintech w-100 py-2 mb-3">Get Started <i class="fa-solid fa-arrow-right ms-2"></i></button>
+            <button type="submit" class="btn btn-primary btn-lg" style="margin-bottom: 16px;">
+                <i class="fa-solid fa-check"></i> Get Started
+            </button>
             
-            <div class="text-center text-muted small">
-                Already have an account? <a href="/login" class="fw-bold text-primary text-decoration-none">Sign In</a>
+            <div style="text-align: center; color: var(--text-secondary); font-size: 14px;">
+                Already have an account? <a href="/login" style="color: var(--primary-color); font-weight: 600;">Sign In</a>
             </div>
         </form>
     </div>

@@ -1,34 +1,32 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="d-flex align-items-center justify-content-center" style="min-height: 80vh;">
-    <div class="glass-card p-5" style="width: 100%; max-width: 400px;">
-        <div class="text-center mb-4">
-            <h2 class="fw-bold text-primary"><img src="{{ url_for('static', filename='images/tr_logo.png') }}"
-                    alt="TR Logo" style="height: 40px; margin-bottom: 8px; border-radius: 8px;">
-            </h2>
-            <p class="text-muted">Welcome back to modern banking</p>
+<div style="display: flex; align-items: center; justify-content: center; min-height: calc(100vh - 100px);">
+    <div class="glass-card" style="width: 100%; max-width: 400px;">
+        <div style="text-align: center; margin-bottom: 32px;">
+            <img src="{{ url_for('static', filename='images/airteal-logo.jpg') }}" alt="Airteal" style="height: 48px; margin-bottom: 12px; border-radius: 10px;">
+            <h2 style="font-weight: 700; color: var(--text-main); margin: 0 0 8px 0;">Welcome Back</h2>
+            <p style="color: var(--text-tertiary); margin: 0;">Sign in to your Airteal account</p>
         </div>
 
-        <form action="/login" method="POST" class="needs-validation" novalidate>
-            <div class="form-floating mb-3">
-                <input type="text" class="form-control bg-transparent" id="mobile" name="mobile"
-                    placeholder="Mobile Number" required>
+        <form action="/login" method="POST" onsubmit="showLoader()">
+            <div class="form-group">
                 <label for="mobile">Mobile Number</label>
+                <input type="text" class="form-control" id="mobile" name="mobile" placeholder="Enter your mobile number" required>
+                <small>We'll never share your information</small>
             </div>
 
-            <div class="form-floating mb-4">
-                <input type="password" class="form-control bg-transparent" id="password" name="password"
-                    placeholder="Password" required>
+            <div class="form-group">
                 <label for="password">Password</label>
+                <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" required>
             </div>
 
-            <button type="submit" class="btn btn-fintech w-100 py-2 mb-3">Login Securely <i
-                    class="fa-solid fa-lock ms-2"></i></button>
+            <button type="submit" class="btn btn-primary btn-lg" style="margin-bottom: 16px;">
+                <i class="fa-solid fa-lock"></i> Login Securely
+            </button>
 
-            <div class="text-center text-muted small">
-                Don't have an account? <a href="/register" class="fw-bold text-primary text-decoration-none">Create an
-                    account</a>
+            <div style="text-align: center; color: var(--text-secondary); font-size: 14px;">
+                Don&apos;t have an account? <a href="/register" style="color: var(--primary-color); font-weight: 600;">Create one</a>
             </div>
         </form>
     </div>

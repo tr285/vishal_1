@@ -1,28 +1,33 @@
+/* Airteal Payment Bank - Interactive Features */
+
 document.addEventListener("DOMContentLoaded", () => {
-    // 1. Dark Mode Toggle
-    const themeToggle = document.getElementById("theme-toggle");
-    const currentTheme = localStorage.getItem("theme");
-
-    if (currentTheme) {
-        document.documentElement.setAttribute("data-theme", currentTheme);
-        if (currentTheme === "dark" && themeToggle) {
-            themeToggle.checked = true;
-        }
-    }
-
-    if (themeToggle) {
-        themeToggle.addEventListener("change", function () {
-            if (this.checked) {
-                document.documentElement.setAttribute("data-theme", "dark");
-                localStorage.setItem("theme", "dark");
-            } else {
-                document.documentElement.setAttribute("data-theme", "light");
-                localStorage.setItem("theme", "light");
-            }
+    // Auto-close flash messages after 5 seconds
+    const flashMessages = document.querySelectorAll('.flash-message');
+    flashMessages.forEach(message => {
+        setTimeout(() => {
+            message.style.animation = 'fadeOut 0.3s ease forwards';
+            setTimeout(() => message.remove(), 300);
+        }, 5000);
+    });
+    
+    // Mobile menu toggle
+    const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+    const sidebar = document.querySelector('.sidebar');
+    if (mobileMenuBtn) {
+        mobileMenuBtn.addEventListener('click', () => {
+            sidebar.classList.toggle('open');
         });
     }
+    
+    // Close mobile menu when a link is clicked
+    const sidebarLinks = document.querySelectorAll('.sidebar a');
+    sidebarLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            sidebar.classList.remove('open');
+        });
+    });
 
-    // 2. Animated Counter for Balance
+    // Animated Counter for Balance
     const balanceElem = document.getElementById("animated-balance");
     if (balanceElem) {
         fetchBalance(balanceElem);
@@ -30,7 +35,7 @@ document.addEventListener("DOMContentLoaded", () => {
         setInterval(() => fetchBalance(balanceElem), 10000);
     }
 
-    // 3. Form Loading Spinner
+    // Form Loading Spinner
     const forms = document.querySelectorAll("form");
     const loader = document.getElementById("loader");
 
@@ -42,11 +47,19 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    // 4. Play Success Sound on certain pages
+    // Play Success Sound on certain pages
     const successElement = document.getElementById("success-anim");
     if (successElement) {
         playSuccessSound();
     }
+    
+    // Form validation on input
+    const inputs = document.querySelectorAll('input[required], textarea[required]');
+    inputs.forEach(input => {
+        input.addEventListener('blur', () => {
+            validateField(input);
+        });
+    });
 });
 
 function fetchBalance(element) {
@@ -80,6 +93,104 @@ function animateValue(obj, start, end, duration) {
     window.requestAnimationFrame(step);
 }
 
+// Validate individual field
+function validateField(field) {
+    const formGroup = field.closest('.form-group');
+    if (!formGroup) return true;
+    
+    let isValid = true;
+    
+    if (field.hasAttribute('required') && !field.value.trim()) {
+        isValid = false;
+    } else if (field.type === 'email' && field.value && !isValidEmail(field.value)) {
+        isValid = false;
+    }
+    
+    if (isValid) {
+        formGroup.classList.remove('error');
+    } else {
+        formGroup.classList.add('error');
+    }
+    
+    return isValid;
+}
+
+// Validate form
+function validateForm(formElement) {
+    const inputs = formElement.querySelectorAll('[required]');
+    let isValid = true;
+    
+    inputs.forEach(input => {
+        if (!validateField(input)) {
+            isValid = false;
+        }
+    });
+    
+    return isValid;
+}
+
+function isValidEmail(email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+}
+
+// Show loader
+function showLoader() {
+    const loader = document.getElementById('loader');
+    if (loader) {
+        loader.classList.add('active');
+    }
+}
+
+// Hide loader
+function hideLoader() {
+    const loader = document.getElementById('loader');
+    if (loader) {
+        loader.classList.remove('active');
+    }
+}
+
+// Copy to clipboard
+function copyToClipboard(text, message = 'Copied!') {
+    navigator.clipboard.writeText(text).then(() => {
+        showFlashMessage(message, 'success');
+    }).catch(err => {
+        console.error('Failed to copy:', err);
+    });
+}
+
+// Show flash message
+function showFlashMessage(message, type = 'info') {
+    const container = document.createElement('div');
+    container.className = `flash-message flash-${type}`;
+    container.textContent = message;
+    document.body.appendChild(container);
+    
+    setTimeout(() => {
+        container.style.animation = 'fadeOut 0.3s ease forwards';
+        setTimeout(() => container.remove(), 300);
+    }, 5000);
+}
+
+// Format currency
+function formatCurrency(amount, currency = 'USD') {
+    return new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: currency,
+    }).format(amount);
+}
+
+// Format date
+function formatDate(date) {
+    return new Intl.DateTimeFormat('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+    }).format(new Date(date));
+}
+
 function playSuccessSound() {
     // A simple short high-pitched ping using Web Audio API
     try {
@@ -111,3 +222,15 @@ function toggleSidebar() {
         sidebar.classList.toggle('open');
     }
 }
+
+// Fade out animation
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes fadeOut {
+        to {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+    }
+`;
+document.head.appendChild(style);

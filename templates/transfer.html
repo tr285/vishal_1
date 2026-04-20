@@ -1,32 +1,35 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="row justify-content-center mt-4">
-    <div class="col-md-6 col-lg-5">
-        <h4 class="fw-bold mb-4">Transfer Money</h4>
-        
-        <div class="glass-card p-4">
-            <div class="d-flex justify-content-between align-items-center mb-4 pe-2">
-                <span class="text-muted small fw-bold">AVAILABLE BALANCE</span>
-                <span class="fw-bold fs-5 text-primary">₹{{ "%.2f"|format(balance) }}</span>
+<div style="max-width: 500px; margin: 0 auto;">
+    <div class="page-header">
+        <h1>Transfer Money</h1>
+        <p>Send money securely to any contact</p>
+    </div>
+    
+    <div class="glass-card" style="margin-bottom: 20px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+            <span style="color: var(--text-tertiary); font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Available Balance</span>
+            <span style="font-weight: 700; font-size: 18px; color: var(--primary-color);">₹{{ "%.2f"|format(balance) }}</span>
+        </div>
+
+        <form action="/transfer" method="POST" onsubmit="if(!confirm('Are you sure you want to send this amount?')) return false; showLoader();">
+            <div class="form-group">
+                <label for="receiver_mobile">Recipient&apos;s Mobile Number</label>
+                <input type="tel" class="form-control" id="receiver_mobile" name="receiver_mobile" placeholder="9876543210" pattern="[0-9]{10}" title="Must be 10 digits" required>
+                <small>10-digit mobile number</small>
+            </div>
+            
+            <div class="form-group">
+                <label for="amount">Amount to Send (₹)</label>
+                <input type="number" class="form-control" id="amount" name="amount" placeholder="0.00" min="1" max="{{ balance }}" step="0.01" required>
+                <small>Maximum available: ₹{{ "%.2f"|format(balance) }}</small>
             </div>
 
-            <form action="/transfer" method="POST" class="needs-validation" onsubmit="return confirm('Are you sure you want to send this amount?');" novalidate>
-                <div class="form-floating mb-3">
-                    <input type="tel" class="form-control bg-transparent fw-bold" id="receiver_mobile" name="receiver_mobile" placeholder="Recipient's Mobile" pattern="[0-9]{10}" required>
-                    <label for="receiver_mobile">Recipient's 10-Digit Mobile</label>
-                </div>
-                
-                <div class="form-floating mb-4">
-                    <input type="number" class="form-control bg-transparent fw-bold fs-3 text-danger" id="amount" name="amount" placeholder="Amount (₹)" min="1" max="{{ balance }}" required>
-                    <label for="amount">Amount (₹)</label>
-                </div>
-
-                <button type="submit" class="btn btn-fintech w-100 py-3 rounded-pill">
-                    Send Securely <i class="fa-solid fa-paper-plane ms-2"></i>
-                </button>
-            </form>
-        </div>
+            <button type="submit" class="btn btn-primary btn-lg">
+                <i class="fa-solid fa-paper-plane"></i> Send Securely
+            </button>
+        </form>
     </div>
 </div>
 {% endblock %}
